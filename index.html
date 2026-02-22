@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>LSAFERS Demo</title>
+  </head>
+  <body>
+    <h1>LSAFERS Minimal Demo</h1>
+
+    <button onclick="load()">Call Backend</button>
+
+    <pre id="output">Click the button…</pre>
+
+    <script>
+      async function load() {
+        const res = await fetch("http://localhost:3001/ping");
+        const data = await res.json();
+        document.getElementById("output").textContent =
+          JSON.stringify(data, null, 2);
+      }
+    </script>
+  </body>
+</html>
