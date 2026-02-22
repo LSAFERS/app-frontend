@@ -13,7 +13,7 @@
 
     <script>
       async function load() {
-        const res = await fetch("http://localhost:3001/ping");
+        const res = await fetch("https://lsafers-backend.onrender.com/ping");
         const data = await res.json();
         document.getElementById("output").textContent =
           JSON.stringify(data, null, 2);
