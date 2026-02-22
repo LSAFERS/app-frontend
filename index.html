@@ -33,6 +33,13 @@
         SUPABASE_ANON_KEY
       );
 
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          document.getElementById("output").textContent =
+            "Logged in as " + session.user.email;
+        }
+      });
+
       async function login() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
