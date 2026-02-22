@@ -23,6 +23,13 @@
 
     <pre id="output">Not logged in</pre>
 
+<hr />
+
+<input type="file" id="file" />
+<button onclick="upload()">Upload File</button>
+
+<p><a id="download" target="_blank"></a></p>
+
     <script>
       // 🔴 REPLACE THESE TWO VALUES
       const SUPABASE_URL = "https://alrvzkpvzbemizsjeozw.supabase.co";
@@ -81,6 +88,32 @@
         const json = await res.json();
         document.getElementById("output").textContent =
           JSON.stringify(json, null, 2);
+      }
+
+      async function upload() {
+        const file = document.getElementById("file").files[0];
+        if (!file) return alert("Choose a file");
+
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+            
+        const res = await fetch(
+          "https://lsafers-backend.onrender.com/upload",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: await file.text(),
+          }
+        );
+
+        const json = await res.json();
+
+        const link = document.getElementById("download");
+        link.href = `https://lsafers-backend.onrender.com${json.downloadUrl}`;
+        link.textContent = "Download uploaded file";
       }
     </script>
   </body>
