@@ -77,4 +77,26 @@ export const api = {
         body: JSON.stringify({ inputs }),
       }),
   },
+
+  pdf: {
+    // Download the retirement preview PDF for a client.
+    // Fetches a binary blob from the backend and triggers a browser download.
+    download: async (clientId: string, clientName: string): Promise<void> => {
+      const headers = await authHeaders()
+      const res = await fetch(`${BACKEND_URL}/clients/${clientId}/pdf/preview`, { headers })
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}))
+        throw new Error((json as { error?: string }).error ?? 'PDF generation failed')
+      }
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `retirement_preview_${clientName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    },
+  },
 }

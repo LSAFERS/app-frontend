@@ -12,6 +12,20 @@ export function ScenarioPreviewTab({ client, onGoToInputs }: Props) {
   const [inputs, setInputs] = useState<ScenarioInputs | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [pdfLoading, setPdfLoading] = useState(false)
+  const [pdfError, setPdfError] = useState<string | null>(null)
+
+  async function handleDownloadPdf() {
+    setPdfLoading(true)
+    setPdfError(null)
+    try {
+      await api.pdf.download(client.id, client.name)
+    } catch (err) {
+      setPdfError(err instanceof Error ? err.message : 'PDF download failed')
+    } finally {
+      setPdfLoading(false)
+    }
+  }
 
   useEffect(() => {
     api.scenario.get(client.id).then((s) => {
@@ -84,15 +98,24 @@ export function ScenarioPreviewTab({ client, onGoToInputs }: Props) {
             ← Edit Inputs
           </button>
           <button
-            disabled
-            className="text-xs px-3 py-1.5 border border-slate-200 text-slate-300
-                       rounded-lg cursor-not-allowed"
-            title="Coming in v2"
+            onClick={handleDownloadPdf}
+            disabled={pdfLoading}
+            className={`text-xs px-3 py-1.5 border rounded-lg transition-colors ${
+              pdfLoading
+                ? 'border-slate-200 text-slate-400 cursor-wait'
+                : 'border-[#1B3D8F] text-[#1B3D8F] hover:bg-[#1B3D8F] hover:text-white'
+            }`}
           >
-            Download PDF (v2)
+            {pdfLoading ? 'Generating…' : 'Download PDF'}
           </button>
         </div>
       </div>
+
+      {pdfError && (
+        <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4">
+          PDF error: {pdfError}
+        </div>
+      )}
 
       <div className="space-y-5">
 
