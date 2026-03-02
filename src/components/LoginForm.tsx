@@ -23,7 +23,7 @@ export function LoginForm() {
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
 
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">LSAFERS</h1>
+          <img src="/stwserve_logo.png" alt="Serving Those Who Serve" className="h-16 w-auto mx-auto mb-3" />
           <p className="mt-1 text-sm text-gray-500">Sign in to your account</p>
         </div>
 

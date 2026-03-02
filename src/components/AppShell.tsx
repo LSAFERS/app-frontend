@@ -10,6 +10,7 @@ type Props = {
 export function AppShell({ session, children }: Props) {
   async function handleLogout() {
     await supabase.auth.signOut()
+    window.location.href = '/'
   }
 
   return (
